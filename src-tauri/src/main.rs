@@ -28,13 +28,26 @@ fn load_notes(app_data_path: PathBuf, state: State<'_, NotesState>) -> Vec<Strin
     }
 }
 
+use std::fs::create_dir_all;
+
 #[tauri::command]
 fn add_note(app_data_path: PathBuf, note: String, state: State<'_, NotesState>) {
     let mut notes = state.notes.lock().unwrap();
     notes.push(note);
+
     let notes_file = app_data_path.join("notes.txt");
     let content = notes.join("\n");
-    write(&notes_file, content).unwrap();
+
+    if let Some(parent) = notes_file.parent() {
+        if let Err(err) = create_dir_all(parent) {
+            println!("Failed to create directory: {}", err);
+            return;
+        }
+    }
+
+    if let Err(err) = write(&notes_file, content) {
+        println!("Failed to write to file: {}", err);
+    }
 }
 
 #[tauri::command]
@@ -42,9 +55,20 @@ fn delete_note(app_data_path: PathBuf, index: usize, state: State<'_, NotesState
     let mut notes = state.notes.lock().unwrap();
     if index < notes.len() {
         notes.remove(index);
+
         let notes_file = app_data_path.join("notes.txt");
         let content = notes.join("\n");
-        write(&notes_file, content).unwrap();
+
+        if let Some(parent) = notes_file.parent() {
+            if let Err(err) = create_dir_all(parent) {
+                println!("Failed to create directory: {}", err);
+                return;
+            }
+        }
+
+        if let Err(err) = write(&notes_file, content) {
+            println!("Failed to write to file: {}", err);
+        }
     }
 }
 
@@ -60,7 +84,7 @@ fn alpha() {
   println!("After mutation: {}", mutable_binding);
 
   // Error! Cannot assign a new value to an immutable variable
-  _immutable_binding += 1;
+//   _immutable_binding += 1;
 }
 
 fn is_odd(n: u32) -> bool {
