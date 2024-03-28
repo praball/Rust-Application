@@ -1,6 +1,6 @@
 # Rust Tauri React Notes App
 
-![App Screenshot](screenshot.png)
+![image](https://github.com/praball/Rust-Application/assets/92200181/49c0c85e-489a-40af-8417-c048af74151a)
 
 ## Overview
 
