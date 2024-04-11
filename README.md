@@ -27,7 +27,7 @@ To get started with the application, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/praball/Rust-Application
 2. Navigate to project directory:
    ```bash
    cd your-repository
